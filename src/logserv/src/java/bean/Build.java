@@ -5,7 +5,7 @@
  */
 package bean;
 
-import java.time.LocalDate;
+import java.sql.Time;
 
 /**
  *
@@ -16,7 +16,7 @@ public class Build {
     private String identifier;
     private String status;
     private String buildlog;
-    private LocalDate timecreated;
+    private Time timecreated;
     
     public Build(){}
     
@@ -30,7 +30,7 @@ public class Build {
         this.buildlog = s;
     }
     
-    public void setTimecreated(LocalDate s){
+    public void setTimecreated(Time s){
         this.timecreated = s;
     }
     
@@ -46,7 +46,7 @@ public class Build {
         return buildlog;
     }
     
-    public LocalDate getTimecreated(){
+    public Time getTimecreated(){
         return timecreated;
     }
 
