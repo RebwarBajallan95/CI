@@ -14,7 +14,7 @@ public class CloneRepo {
     private File tempDirectory;
 
 
-    CloneRepo(String gitUrl, String branchName, String tempDirPath) throws IOException, GitAPIException {
+    public CloneRepo(String gitUrl, String branchName, String tempDirPath) throws IOException, GitAPIException {
         tempDirectory = createTempDir(tempDirPath);
         System.out.println(tempDirectory + " created!");
         cloneRepository(gitUrl, branchName, tempDirectory);

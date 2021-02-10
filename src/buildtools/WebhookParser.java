@@ -16,7 +16,7 @@ public class WebhookParser {
     private String commitID;
 
 
-    WebhookParser(BufferedReader webhookReader){
+    public WebhookParser(BufferedReader webhookReader){
         try {
             webhook = gson.fromJson(webhookReader, LinkedTreeMap.class);
             repoBranch = branch(webhook);
