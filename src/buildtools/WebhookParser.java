@@ -12,8 +12,9 @@ public class WebhookParser {
     private String repoBranch;
     private String repoURL;
     private String repoName;
-    private String repoOwner;
+    private String namePusher;
     private String commitID;
+    private String emailPusher;
 
 
     public WebhookParser(BufferedReader webhookReader){
@@ -22,7 +23,8 @@ public class WebhookParser {
             repoBranch = branch(webhook);
             repoURL = (String) getInnerJson(webhook,"repository").get("html_url");
             repoName = (String) getInnerJson(webhook,"repository").get("name");
-            repoOwner = (String)getInnerJson(webhook,"owner").get("name");
+            namePusher = (String)getInnerJson(webhook,"pusher").get("name");
+            emailPusher = (String)getInnerJson(webhook,"pusher").get("email");
             commitID = (String) webhook.get("after");
         } catch (Exception e){
             System.out.println(e);
@@ -47,8 +49,11 @@ public class WebhookParser {
     }
 
 
-    /* Get repo owner */
-    public String getRepoOwner(){ return repoOwner; }
+    /* Get pusher name */
+    public String getName(){ return namePusher; }
+
+    /* Get pusher email */
+    public String getEmail(){ return emailPusher; }
 
     /* Get repo URL */
     public String getrepoURL(){ return repoURL; }
