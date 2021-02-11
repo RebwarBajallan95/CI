@@ -16,7 +16,7 @@ public class CompileFiles {
 
     private Map<Path, Integer> results = new HashMap<Path, Integer>();
 
-    CompileFiles(Path pathToFolder, OutputStream output) throws IOException {
+    public CompileFiles(Path pathToFolder, OutputStream output) throws IOException {
         List<Path> paths = listFiles(pathToFolder);
         paths.forEach(x -> {
             try {
