@@ -2,6 +2,7 @@ package testTools;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.util.stream.Collectors;
 
 /**
  * Class to run the test suit towards the
@@ -10,14 +11,16 @@ import java.lang.reflect.Method;
  */
 public class Tests {
     File results;
+    OutputStream os;
 
     /**
      * Run tests towards the target project
      * @param testDirectory the directory
      * to the compiled files
      */
-    public Tests(String testDirectory) throws Exception {
+    public Tests(String testDirectory, OutputStream os) throws Exception {
         results = new File("results.txt");
+        this.os = os;
         runTests(testDirectory);
     }
 
@@ -34,7 +37,7 @@ public class Tests {
         File directory = new File(System.getProperty("user.dir") + "/src/testTools");
         File[] directoryList = directory.listFiles();
         for(File f : directoryList){
-            if (f.canExecute() && f.getName().contains(".class")){
+            if (f.canExecute() && f.getName().contains(".class") && f.getName().contains("Test")){
                 System.out.println(f.getName());
                 start(f.getName());
             }
@@ -45,7 +48,7 @@ public class Tests {
      * @return the test results
      * of the current build
      */
-    public File getResults(){
+    public File getResults() {
         return results;
     }
 
@@ -66,5 +69,11 @@ public class Tests {
                 throw new AssertionError(e);
             }
         }).start();
+    }
+
+    public static void main(String[] args) throws Exception {
+        OutputStream os = new FileOutputStream("");
+        Tests tests = new Tests(" ", os);
+        File results = tests.getResults();
     }
 }
