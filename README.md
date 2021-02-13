@@ -21,3 +21,10 @@ Dependencies for the project
 * [SQLite](https://jar-download.com/artifacts/org.xerial/sqlite-jdbc/3.14.2/source-code) 3.14.2
 
 The Servlet Dependency should be named "servlet" and the SQLite"sqllite" also make sure that you copy the libraries files to the project directory
+
+### Execution
+
+# 1.
+    Start the CI server by running `src/logserv/CIServer.java`
+    The server will be run at `localhost:8888` 
+    
