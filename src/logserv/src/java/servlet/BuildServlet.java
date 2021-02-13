@@ -25,6 +25,13 @@ import servlet.DBUtils.*;
  */
 public class BuildServlet extends HttpServlet {
     
+    /**
+     * This is the get endpoint for buildservlet
+     * the url request are filtered if they contains queryId
+     * a single build is fetch from the db else fetch all
+     * Finally builds arraylist is passed to the builds.jsp file
+     * @return void redirecting to builds.jsp
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
