@@ -19,3 +19,5 @@ Dependencies for the project
 * [Servlet](https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api/3.0.1) 3.0.1
 
 * [SQLite](https://jar-download.com/artifacts/org.xerial/sqlite-jdbc/3.14.2/source-code) 3.14.2
+
+The Servlet Dependency should be named "servlet" and the SQLite"sqllite" also make sure that you copy the libraries files to the project directory
