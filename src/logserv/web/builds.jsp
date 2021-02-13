@@ -1,5 +1,5 @@
 <%-- 
-Author     : Simon
+Get list from request.getAttribute("buildList") and assign it to list
 --%>
 
 <%@page import="bean.Build"%>
@@ -29,6 +29,9 @@ rel="stylesheet"
 href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 />
 
+<%-- 
+Get list items from the servlet and loop the array with its items and html elements
+--%>
 
 </head>
     <body>
@@ -58,6 +61,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
   </thead>
   <tbody>
       
+    
     <% for(int j=0; j<list.size(); j++) { %>
         
       <tr>
