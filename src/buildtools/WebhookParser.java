@@ -5,7 +5,10 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.BufferedReader;
 
-
+/**
+ * Class to parse branch information
+ * from a Webhook.
+ */
 public class WebhookParser {
     private Gson gson = new Gson();
     private LinkedTreeMap<String, Object> webhook;
@@ -17,6 +20,14 @@ public class WebhookParser {
     private String emailPusher;
 
 
+    /**
+     * Construct a Webhook Parser that
+     * will contain information about
+     * a branch attempting to make a
+     * push to the main branch of
+     * the repository.
+     * @param webhookReader
+     */
     public WebhookParser(BufferedReader webhookReader){
         try {
             webhook = gson.fromJson(webhookReader, LinkedTreeMap.class);
@@ -31,8 +42,9 @@ public class WebhookParser {
         }
     }
 
-    /*
-        @Returns branch name given in webhook
+    /**
+     * @param json file containing information about the branch
+     * @return name of the branch
      */
     private String branch(LinkedTreeMap json){
         String refVal = (String) json.get("ref");
@@ -40,31 +52,44 @@ public class WebhookParser {
         return splitRef[splitRef.length-1];
     }
 
-
-    /*
-        @Returns inner Json in nested Json structure given key
+    /**
+     * @param json the nested JSON file
+     * @param key to fetch the inner JSON file
+     * @return inner JSON file
      */
     private LinkedTreeMap getInnerJson(LinkedTreeMap json, String key){
         return (LinkedTreeMap) json.get(key);
     }
 
-
-    /* Get pusher name */
+    /**
+     * @return the name of the pusher
+     */
     public String getName(){ return namePusher; }
 
-    /* Get pusher email */
+    /**
+     * @return the e-mail address of the pusher
+     */
     public String getEmail(){ return emailPusher; }
 
-    /* Get repo URL */
+    /**
+     * @return URL of the repository
+     */
     public String getrepoURL(){ return repoURL; }
 
-    /* Get repo name */
+    /**
+     * @return name of the repository
+     */
     public String getrepoName(){ return repoName; }
 
-    /* Get Commit ID */
+    /**
+     *
+     * @return the commit ID of the push
+     */
     public String getCommitID(){ return commitID; }
 
-    /* Get branch */
+    /**
+     * @return the branch who is pushing
+     */
     public String getBranch(){ return repoBranch; }
 
 }

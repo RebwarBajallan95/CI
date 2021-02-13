@@ -23,9 +23,9 @@ public class SendMail {
      * Constructor to send an email to recipient
      * @param recipientName name of the recipient
      * @param recipientEmail email of the recipient
-     * @param results results of the automated tests
-     * @param result results regarding if all tests
-     *               succeded or not
+     * @param fileResult results of the automated tests
+     * @param boolResult results regarding if all tests
+     *                  succeded or not
      */
     public static void sendMail(String recipientName,String recipientEmail, File fileResult, Boolean boolResult){
         Properties properties = new Properties();
@@ -41,23 +41,17 @@ public class SendMail {
         properties.put("mail.smtp.auth", "true");
 
         try {
-            // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
 
-            // Set From: header field of the header.
             message.setFrom(new InternetAddress("besselingcodehub@gmail.com"));
 
-            // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
 
-            // Set Subject: header field
             message.setSubject("Automated test results");
 
-            // Now set the actual message
             message.setText(formatOutPut(fileResult,boolResult));
 
             System.out.println("sending...");
-            // Send message
             Transport.send(message);
             System.out.println("Sent message successfully....");
 

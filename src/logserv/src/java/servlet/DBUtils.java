@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- *
+ * Data Base utility functions
  * @author Lucas
  */
 public class DBUtils {
@@ -14,6 +14,11 @@ public class DBUtils {
     final String sqlFetchWithId = "SELECT id, identifier, status, buildlog, timecreated FROM build WHERE id = ?;";
     final String sqlFetchNoId = "SELECT id, identifier, status, buildlog, timecreated FROM build";
 
+    /**
+     * Query the data base with ID
+     * @param id
+     * @return an ArrayList of builds
+     */
     public ArrayList<Build> fetchWithId(int id){
 
         ArrayList<Build> builds = new ArrayList<>();
@@ -49,6 +54,10 @@ public class DBUtils {
         return builds;
     }
 
+    /**
+     * Query the data base without ID
+     * @return array of builds
+     */
     public ArrayList<Build> fetchWithNoId(){
         ArrayList<Build> builds = new ArrayList<>();
         Connection conn = this.connect();
@@ -81,6 +90,10 @@ public class DBUtils {
         return builds;
     }
 
+    /**
+     * Connect to the data base
+     * @return the connection to the database
+     */
     private Connection connect(){
         String url = "jdbc:sqlite:/home/vidarr/temp/logs.db";
         String tableCreationString = "CREATE TABLE IF NOT EXISTS build (\n"

@@ -20,18 +20,26 @@ import javax.servlet.http.HttpSession;
 import servlet.DBUtils.*;
 
 /**
- *
+ * Class to implement a basic API
+ * to handle the requests and responses
+ * to and from the CI server.
  * @author Simon, Lucas
  */
 public class BuildServlet extends HttpServlet {
-    
+
+    /**
+     * @param request request from the client to the server
+     * @param response response from the server to the client
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         ArrayList<Build> builds = new ArrayList<Build>();
         String queryId = request.getParameter("id");
-        DBUtils dbu = new DBUtils();
+        servlet.DBUtils dbu = new servlet.DBUtils();
 
         if(queryId !=null) {
             builds = dbu.fetchWithId(Integer.parseInt(queryId));

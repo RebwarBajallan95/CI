@@ -18,11 +18,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Continuous Integration server.
+ */
 public class CIServer extends AbstractHandler{
-
     private CloneRepo cr;
     private String tempFolderPath = System.getProperty("user.dir") + "/temp";
 
+    /**
+     * Handles the request by parsing the branch data. Compiling and
+     * runs the branch tests to produce a test result. The result
+     * will then be saved to the data base log history and the
+     * pusher will be notified about the results.
+     *
+     * @param target the target project
+     * @param baseRequest
+     * @param request the request coming from the client to server
+     * @param response the response to the client from the server
+     * @throws IOException
+     */
     public void handle(String target,
                            Request baseRequest,
                            HttpServletRequest request,
@@ -34,9 +48,7 @@ public class CIServer extends AbstractHandler{
             baseRequest.setHandled(true);
 
             System.out.println(target);
-            // Listen to webhook endpoint
             if("POST".equals(request.getMethod())){
-                // Output file where the logs are stored
                 OutputStream out = new FileOutputStream(tempFolderPath + "/logs.txt");
                 WebhookParser wh = new WebhookParser(request.getReader());
                 try {
@@ -45,15 +57,12 @@ public class CIServer extends AbstractHandler{
                     e.printStackTrace();
                 }
                 File tempdir = cr.getTempDir();
-                // Compile files
                 CompileFiles cf = new CompileFiles(tempdir.toPath(), out);
                 if(cf.compileStatus() == 1){
                     Tests tests = new Tests(tempdir.getPath(), out);
                 }
                 out.close();
-                // Send email
                 SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
-                // Enter results into DB
                 System.out.println("Done!");
             }
 
@@ -61,15 +70,15 @@ public class CIServer extends AbstractHandler{
             response.getWriter().println("CI job done");
         }
 
-
-
-        // Used to start the CI server in command line
-        public static void main(String[] args) throws Exception
-        {
-
-            Server server = new Server(8888);
-            server.setHandler(new CIServer());
-            server.start();
-            server.join();
-        }
+    /**
+     * Used to start the CI server in command line
+     * @param args Not used
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(8888);
+        server.setHandler(new CIServer());
+        server.start();
+        server.join();
+    }
 }

@@ -21,3 +21,16 @@ Dependencies for the project
 * [SQLite](https://jar-download.com/artifacts/org.xerial/sqlite-jdbc/3.14.2/source-code) 3.14.2
 
 The Servlet Dependency should be named "servlet" and the SQLite"sqllite" also make sure that you copy the libraries files to the project directory
+
+
+### List of contributions
+
+Johan Besseling
+
+* AutomatedTesting branch: Tests.java
+
+* emailNotification branch: SendMail.java
+
+* Documentation branch: Refactoring all documentation in to Java standard
+
+* Assessment branch: isPrime.java, isPrimeTest.java
