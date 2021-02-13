@@ -8,11 +8,15 @@ package bean;
 import java.sql.Time;
 
 /**
- *
+ * A build bean object to map from and to db
+ * has private properities such as
+ * identifier, status, buildlog, timecreated
  * @author Simon
  */
+
+ 
 public class Build {
-    
+
     private String identifier;
     private String status;
     private String buildlog;
