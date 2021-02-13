@@ -4,6 +4,9 @@ import bean.Build;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig.Pragma;
 
 /**
  *
@@ -29,7 +32,8 @@ public class DBUtils {
                 tempBuild.setIdentifier(res.getString("identifier"));
                 tempBuild.setStatus(res.getString("status"));
                 tempBuild.setBuildlog(res.getString("buildlog"));
-                tempBuild.setTimecreated(res.getTime("timecreated"));
+                Timestamp ts = res.getTimestamp("timecreated");
+                tempBuild.setTimecreated(ts.toInstant());
                 builds.add(tempBuild);
             }
 
@@ -62,7 +66,8 @@ public class DBUtils {
                 tempBuild.setIdentifier(res.getString("identifier"));
                 tempBuild.setStatus(res.getString("status"));
                 tempBuild.setBuildlog(res.getString("buildlog"));
-                tempBuild.setTimecreated(res.getTime("timecreated"));
+                Timestamp ts = res.getTimestamp("timecreated");
+                tempBuild.setTimecreated(ts.toInstant());
                 builds.add(tempBuild);
             }
         } catch (SQLException e) {
@@ -109,7 +114,10 @@ public class DBUtils {
     }
 
     private Connection connect(){
-        String url = "jdbc:sqlite:/home/vidarr/temp/logs.db";
+        SQLiteConfig sqLiteConfig = new SQLiteConfig();
+        Properties properties = sqLiteConfig.toProperties();
+        properties.setProperty(Pragma.DATE_STRING_FORMAT.pragmaName, "yyyy-MM-dd HH:mm:ss");
+        String url = "jdbc:sqlite:logs.db";
         String tableCreationString = "CREATE TABLE IF NOT EXISTS build (\n"
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                 + "identifier TEXT,\n"
@@ -121,7 +129,7 @@ public class DBUtils {
         Connection retConn = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:logs.db");
+            Connection conn = DriverManager.getConnection(url, properties);
             if (conn != null){
                 DatabaseMetaData meta = conn.getMetaData();
                 Statement stmt = conn.createStatement();

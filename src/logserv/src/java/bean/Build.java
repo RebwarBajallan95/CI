@@ -5,7 +5,8 @@
  */
 package bean;
 
-import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * A build bean object to map from and to db
@@ -20,7 +21,7 @@ public class Build {
     private String identifier;
     private String status;
     private String buildlog;
-    private Time timecreated;
+    private Instant timecreated;
     
     public Build(){}
     
@@ -34,7 +35,7 @@ public class Build {
         this.buildlog = s;
     }
     
-    public void setTimecreated(Time s){
+    public void setTimecreated(Instant s){
         this.timecreated = s;
     }
     
@@ -50,7 +51,7 @@ public class Build {
         return buildlog;
     }
     
-    public Time getTimecreated(){
+    public Instant getTimecreated(){
         return timecreated;
     }
 
