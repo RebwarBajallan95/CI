@@ -81,6 +81,33 @@ public class DBUtils {
         return builds;
     }
 
+    public void insertLog(String identifier, String status, String log){
+        String insertionString = "INSERT INTO build (\n"
+                + "identifier, status, buildlog)\n"
+                + "VALUES (?, ?, ?)";
+        Connection conn = this.connect();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(insertionString);
+            pstmt.setString(1, identifier);
+            pstmt.setString(2, status);
+            pstmt.setString(3, log);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try
+            {
+                if(conn != null)
+                    conn.close();
+            }
+            catch(SQLException e)
+            {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
     private Connection connect(){
         String url = "jdbc:sqlite:/home/vidarr/temp/logs.db";
         String tableCreationString = "CREATE TABLE IF NOT EXISTS build (\n"
