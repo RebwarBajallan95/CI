@@ -20,6 +20,8 @@ Dependencies for the project
 
 * [SQLite](https://jar-download.com/artifacts/org.xerial/sqlite-jdbc/3.14.2/source-code) 3.14.2
 
+* [Gson](https://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.6/) 2.8.6
+
 The Servlet Dependency should be named "servlet" and the SQLite"sqllite" also make sure that you copy the libraries files to the project directory
 
 ### Execution
