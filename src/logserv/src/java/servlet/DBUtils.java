@@ -4,6 +4,9 @@ import bean.Build;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig.Pragma;
 
 /**
  * Data Base utility functions
@@ -34,7 +37,8 @@ public class DBUtils {
                 tempBuild.setIdentifier(res.getString("identifier"));
                 tempBuild.setStatus(res.getString("status"));
                 tempBuild.setBuildlog(res.getString("buildlog"));
-                tempBuild.setTimecreated(res.getTime("timecreated"));
+                Timestamp ts = res.getTimestamp("timecreated");
+                tempBuild.setTimecreated(ts.toInstant());
                 builds.add(tempBuild);
             }
 
@@ -71,7 +75,8 @@ public class DBUtils {
                 tempBuild.setIdentifier(res.getString("identifier"));
                 tempBuild.setStatus(res.getString("status"));
                 tempBuild.setBuildlog(res.getString("buildlog"));
-                tempBuild.setTimecreated(res.getTime("timecreated"));
+                Timestamp ts = res.getTimestamp("timecreated");
+                tempBuild.setTimecreated(ts.toInstant());
                 builds.add(tempBuild);
             }
         } catch (SQLException e) {
@@ -90,12 +95,38 @@ public class DBUtils {
         return builds;
     }
 
-    /**
-     * Connect to the data base
-     * @return the connection to the database
-     */
+    public void insertLog(String identifier, String status, String log){
+        String insertionString = "INSERT INTO build (\n"
+                + "identifier, status, buildlog)\n"
+                + "VALUES (?, ?, ?)";
+        Connection conn = this.connect();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(insertionString);
+            pstmt.setString(1, identifier);
+            pstmt.setString(2, status);
+            pstmt.setString(3, log);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try
+            {
+                if(conn != null)
+                    conn.close();
+            }
+            catch(SQLException e)
+            {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
     private Connection connect(){
-        String url = "jdbc:sqlite:/home/vidarr/temp/logs.db";
+        SQLiteConfig sqLiteConfig = new SQLiteConfig();
+        Properties properties = sqLiteConfig.toProperties();
+        properties.setProperty(Pragma.DATE_STRING_FORMAT.pragmaName, "yyyy-MM-dd HH:mm:ss");
+        String url = "jdbc:sqlite:logs.db";
         String tableCreationString = "CREATE TABLE IF NOT EXISTS build (\n"
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                 + "identifier TEXT,\n"
@@ -107,7 +138,7 @@ public class DBUtils {
         Connection retConn = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:logs.db");
+            Connection conn = DriverManager.getConnection(url, properties);
             if (conn != null){
                 DatabaseMetaData meta = conn.getMetaData();
                 Statement stmt = conn.createStatement();

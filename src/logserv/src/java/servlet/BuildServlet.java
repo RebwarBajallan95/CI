@@ -26,12 +26,13 @@ import servlet.DBUtils.*;
  * @author Simon, Lucas
  */
 public class BuildServlet extends HttpServlet {
-
+    
     /**
-     * @param request request from the client to the server
-     * @param response response from the server to the client
-     * @throws ServletException
-     * @throws IOException
+     * This is the get endpoint for buildservlet
+     * the url request are filtered if they contains queryId
+     * a single build is fetch from the db else fetch all
+     * Finally builds arraylist is passed to the builds.jsp file
+     * @return void redirecting to builds.jsp
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,8 +40,8 @@ public class BuildServlet extends HttpServlet {
 
         ArrayList<Build> builds = new ArrayList<Build>();
         String queryId = request.getParameter("id");
-        servlet.DBUtils dbu = new servlet.DBUtils();
-
+        DBUtils dbu = new DBUtils();
+        
         if(queryId !=null) {
             builds = dbu.fetchWithId(Integer.parseInt(queryId));
         } else {

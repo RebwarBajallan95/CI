@@ -5,23 +5,26 @@
  */
 package bean;
 
-import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
- * Class to hold an instance of a
- * repository build
+ * A build bean object to map from and to db
+ * has private properities such as
+ * identifier, status, buildlog, timecreated
  * @author Simon
  */
+
+ 
 public class Build {
-    
+
     private String identifier;
     private String status;
     private String buildlog;
-    private Time timecreated;
-
-    /**
-     * @param s string that will identify the build
-     */
+    private Instant timecreated;
+    
+    public Build(){}
+    
     public void setIdentifier(String s){
         this.identifier = s;
     }
@@ -39,11 +42,8 @@ public class Build {
     public void setBuildlog(String s){
         this.buildlog = s;
     }
-
-    /**
-     * @param s set the time when the build was created
-     */
-    public void setTimecreated(Time s){
+    
+    public void setTimecreated(Instant s){
         this.timecreated = s;
     }
 
@@ -67,11 +67,8 @@ public class Build {
     public String getBuildlog(){
         return buildlog;
     }
-
-    /**
-     * @return the time of creation
-     */
-    public Time getTimecreated(){
+    
+    public Instant getTimecreated(){
         return timecreated;
     }
 
