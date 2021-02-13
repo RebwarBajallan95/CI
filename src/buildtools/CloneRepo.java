@@ -9,11 +9,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Class to clone a repository
+ */
 public class CloneRepo {
-
     private File tempDirectory;
 
-
+    /**
+     * Constructor to clone a repository
+     * from github
+     * @param gitUrl the URL to the github repository
+     * @param branchName name of the branch where the push is being made
+     * @param tempDirPath path to put a temporary directory
+     * @throws IOException
+     * @throws GitAPIException
+     */
     public CloneRepo(String gitUrl, String branchName, String tempDirPath) throws IOException, GitAPIException {
         tempDirectory = createTempDir(tempDirPath);
         System.out.println(tempDirectory + " created!");
@@ -21,9 +31,14 @@ public class CloneRepo {
     }
 
 
-    /*
-       Clone git repository
-    */
+    /**
+     *
+     * @param gitUrl the URL to the github repository
+     * @param branchName name of the branch where the push is being made
+     * @param tempDir the temporary directory to put all logs produced
+     *                during the tests
+     * @throws GitAPIException
+     */
     private void cloneRepository(String gitUrl, String branchName, File tempDir) throws GitAPIException {
         System.out.println("Cloning from " + gitUrl + " to " + tempDir);
         try (Git result = Git.cloneRepository()
@@ -36,9 +51,12 @@ public class CloneRepo {
         }
     }
 
-    /*
-        Creates temporary directory
-    */
+
+    /**
+     * @param tempDirPath path to put the temporary directory
+     * @return a directory
+     * @throws IOException
+     */
     private File createTempDir(String tempDirPath) throws IOException {
         File tempdir = Files.createTempDirectory(
                 Paths.get(tempDirPath),
@@ -47,9 +65,10 @@ public class CloneRepo {
         return tempdir;
     }
 
-    /*
-      Deletes directory
-    */
+
+    /**
+     * @param tempDir the directory to be deleted
+     */
     public void deleteDir(File tempDir){
         try {
             System.out.println("Directory " + tempDir + " deleted!");
@@ -59,17 +78,25 @@ public class CloneRepo {
         }
     }
 
-    /*
-    Set temporary directory
-    */
+
+    /**
+     * @param Dir directory to be set as the
+     *            temporary directory
+     */
     public void setTempDir(File Dir){ tempDirectory = Dir; }
 
-    /*
-        Get temporary directory
-    */
+
+    /**
+     * @return the temporary directory
+     */
     public File getTempDir(){ return tempDirectory; }
 
 
+    /**
+     * @param args Not used
+     * @throws IOException
+     * @throws GitAPIException
+     */
     public static void main(String[] args) throws IOException, GitAPIException {
         CloneRepo cloneTest = new CloneRepo("https://github.com/RebwarBajallan95/RandomProject",
                                         "testBranch",
