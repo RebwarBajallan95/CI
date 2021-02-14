@@ -22,3 +22,5 @@ public class isPrime {
         return true;
     }
 }
+
+// TEST
