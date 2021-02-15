@@ -1,7 +1,10 @@
 package buildtools;
 
 import javax.tools.JavaCompiler;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,6 +21,7 @@ import java.util.stream.Stream;
  */
 public class CompileFiles {
     private Map<Path, Integer> results = new HashMap<Path, Integer>();
+    private Path pathToTemp;
 
     /**
      * Constructor to compile all
@@ -28,6 +32,8 @@ public class CompileFiles {
      * @throws IOException
      */
     public CompileFiles(Path pathToFolder, OutputStream output) throws IOException {
+
+        pathToTemp = pathToFolder;
         List<Path> paths = listFiles(pathToFolder);
         paths.forEach(x -> {
             try {
@@ -46,7 +52,15 @@ public class CompileFiles {
      * @throws IOException
      */
     public void compile (Path javaFilePath, OutputStream output) throws IOException {
+
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        StandardJavaFileManager manager = compiler.getStandardFileManager(null, null, null);
+        try {
+            manager.setLocation(StandardLocation.CLASS_PATH, Arrays.asList(new File(pathToTemp.toString())));
+            System.out.println(pathToTemp.toString());
+        } catch (Exception e ){
+            System.out.println(e);
+        }
         int result = compiler.run(null, null, output,
                 String.valueOf(javaFilePath));
         results.put(javaFilePath, result);

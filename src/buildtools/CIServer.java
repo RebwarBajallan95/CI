@@ -1,16 +1,10 @@
-package logserv;
+package buildtools;
 
-import buildtools.CloneRepo;
-import buildtools.CompileFiles;
-import buildtools.SendMail;
-import buildtools.WebhookParser;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import testTools.Tests;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -57,12 +51,14 @@ public class CIServer extends AbstractHandler{
                     e.printStackTrace();
                 }
                 File tempdir = cr.getTempDir();
-                CompileFiles cf = new CompileFiles(tempdir.toPath(), out);
+
+                    CompileFiles cf = new CompileFiles(tempdir.toPath(), out);
+
                 if(cf.compileStatus() == 1){
-                    Tests tests = new Tests(tempdir.getPath(), out);
+                   // Tests tests = new Tests(tempdir.getPath(), out);
                 }
                 out.close();
-                SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
+               // SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
                 System.out.println("Done!");
             }
 

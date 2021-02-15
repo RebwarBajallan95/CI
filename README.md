@@ -27,7 +27,7 @@ The Servlet Dependency should be named "servlet" and the SQLite"sqllite" also ma
 ### Execution
 
 # 1.
-    Start the CI server by running `src/logserv/CIServer.java`
+    Start the CI server by running `src/logserv/buildtools.CIServer.java`
     The server will be run at `localhost:8888` 
     
 ### List of contributions
