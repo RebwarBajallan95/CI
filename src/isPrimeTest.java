@@ -24,7 +24,10 @@ import java.io.IOException;
      * when using an argument lesser than two
      */
     private boolean test_One(){
-        return !isPrime.isPrime(INTEGER_BELOW_TWO) ? true : false;
+
+        isPrime ispr = new isPrime();
+
+        return !ispr.isPrime(INTEGER_BELOW_TWO) ? true : false;
     }
 
     /**
@@ -34,7 +37,10 @@ import java.io.IOException;
      * @return if the tests fails or not
      */
     private boolean test_Two(){
-        return isPrime.isPrime(INTEGER_PRIME) ? true : false;
+
+        isPrime ispr = new isPrime();
+
+        return ispr.isPrime(INTEGER_PRIME) ? true : false;
     }
 
     /**
@@ -43,7 +49,10 @@ import java.io.IOException;
      * @return if the tests fails or not
      */
     private boolean test_Three(){
-        return !isPrime.isPrime(INTEGER_EVEN_NUMBER) ? true : false;
+
+        isPrime ispr = new isPrime();
+
+        return !ispr.isPrime(INTEGER_EVEN_NUMBER) ? true : false;
     }
 
     /**
@@ -52,7 +61,10 @@ import java.io.IOException;
      * @return if the test fails or not
      */
     private boolean test_Four(){
-        return !isPrime.isPrime(INTEGER_ODD_NOT_PRIME) ? true : false;
+
+        isPrime ispr = new isPrime();
+
+        return !ispr.isPrime(INTEGER_ODD_NOT_PRIME) ? true : false;
     }
 
     /**
