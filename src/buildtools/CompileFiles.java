@@ -5,13 +5,12 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,19 +30,39 @@ public class CompileFiles {
      * @param output outputstre
      * @throws IOException
      */
-    public CompileFiles(Path pathToFolder, OutputStream output) throws IOException {
-
+    public CompileFiles(Path pathToFolder, OutputStream output) throws IOException, InterruptedException {
         pathToTemp = pathToFolder;
         List<Path> paths = listFiles(pathToFolder);
-        paths.forEach(x -> {
-            try {
-                compile(x, output);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        String compileString = "";
+        List<String> listString = new LinkedList<String>();
+        //listString.add("javac");
+
+        for(int i=0;i<paths.size();i++){
+            listString.add("javac " + (paths.get(i).toString()));
+        }
+        System.out.println(listString);
+
+        ProcessBuilder compile = new ProcessBuilder();
+        compile.command(listString);
+        //compile.directory(new File(System.getProperty("user.dir") + "/"+pathToTemp.toString()+"/src/"));
+        compile.inheritIO();
+        compile.redirectError(new File("errorFile.txt"));
+        compile.redirectOutput(new File("logFile.txt"));
+        Process compileProcess = compile.start();
+        compileProcess.waitFor(5, TimeUnit.SECONDS);
+        ProcessBuilder execute = new ProcessBuilder("java", "isPrimeTest");
+        execute.directory(new File(System.getProperty("user.dir") + "/temp/"));
+        execute.redirectError(new File("errorFile1.txt"));
+        execute.redirectOutput(new File("logFile1.txt"));
+        Process executionProcess = execute.start();
+        executionProcess.waitFor(5,TimeUnit.SECONDS);
     }
 
+
+    private String getFileName(String path){
+        String[] bits = path.split("/");
+        return bits[bits.length-1];
+    }
 
     /**
      * Compile java file given path, output provided in OutputStream

@@ -52,11 +52,17 @@ public class CIServer extends AbstractHandler{
                 }
                 File tempdir = cr.getTempDir();
 
+                try {
                     CompileFiles cf = new CompileFiles(tempdir.toPath(), out);
-
-                if(cf.compileStatus() == 1){
-                   // Tests tests = new Tests(tempdir.getPath(), out);
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
+
+               // if(cf.compileStatus() == 1){
+               //    // Tests tests = new Tests(tempdir.getPath(), out);
+                //
+                // }
+
                 out.close();
                // SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
                 System.out.println("Done!");
