@@ -2,6 +2,7 @@ package servlet;
 
 import bean.Build;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -25,7 +26,8 @@ public class DBUtils {
     public ArrayList<Build> fetchWithId(int id){
 
         ArrayList<Build> builds = new ArrayList<>();
-        Connection conn = this.connect();
+
+        Connection conn = this.connect("./../../../../../logs.db");
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(sqlFetchWithId);
@@ -64,7 +66,7 @@ public class DBUtils {
      */
     public ArrayList<Build> fetchWithNoId(){
         ArrayList<Build> builds = new ArrayList<>();
-        Connection conn = this.connect();
+        Connection conn = this.connect("./../../../../../logs.db");
 
         try {
             Statement stmt = conn.createStatement();
@@ -99,7 +101,7 @@ public class DBUtils {
         String insertionString = "INSERT INTO build (\n"
                 + "identifier, status, buildlog)\n"
                 + "VALUES (?, ?, ?)";
-        Connection conn = this.connect();
+        Connection conn = this.connect("logs.db");
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(insertionString);
@@ -122,11 +124,11 @@ public class DBUtils {
         }
     }
 
-    private Connection connect(){
+    private Connection connect(String location){
         SQLiteConfig sqLiteConfig = new SQLiteConfig();
         Properties properties = sqLiteConfig.toProperties();
         properties.setProperty(Pragma.DATE_STRING_FORMAT.pragmaName, "yyyy-MM-dd HH:mm:ss");
-        String url = "jdbc:sqlite:logs.db";
+        String url = "jdbc:sqlite:" + location;
         String tableCreationString = "CREATE TABLE IF NOT EXISTS build (\n"
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                 + "identifier TEXT,\n"
