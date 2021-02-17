@@ -31,31 +31,29 @@ public class CompileFiles {
      * @throws IOException
      */
     public CompileFiles(Path pathToFolder, OutputStream output) throws IOException, InterruptedException {
+        File logFile = new File("logFile.txt");
+        File errorFile = new File("errorFile.txt");
         pathToTemp = pathToFolder;
         List<Path> paths = listFiles(pathToFolder);
-        String compileString = "";
-        List<String> listString = new LinkedList<String>();
-        //listString.add("javac");
-
+        ProcessBuilder classPath = new ProcessBuilder("java","-cp", pathToTemp.toString());
+        Process cp = classPath.start();
+        cp.waitFor(5,TimeUnit.SECONDS);
+        List<String> args = new LinkedList<String>();
+        args.add("javac");
         for(int i=0;i<paths.size();i++){
-            listString.add("javac " + (paths.get(i).toString()));
+            args.add(paths.get(i).toString());
         }
-        System.out.println(listString);
-
-        ProcessBuilder compile = new ProcessBuilder();
-        compile.command(listString);
-        //compile.directory(new File(System.getProperty("user.dir") + "/"+pathToTemp.toString()+"/src/"));
-        compile.inheritIO();
-        compile.redirectError(new File("errorFile.txt"));
-        compile.redirectOutput(new File("logFile.txt"));
-        Process compileProcess = compile.start();
-        compileProcess.waitFor(5, TimeUnit.SECONDS);
-        ProcessBuilder execute = new ProcessBuilder("java", "isPrimeTest");
-        execute.directory(new File(System.getProperty("user.dir") + "/temp/"));
-        execute.redirectError(new File("errorFile1.txt"));
-        execute.redirectOutput(new File("logFile1.txt"));
-        Process executionProcess = execute.start();
-        executionProcess.waitFor(5,TimeUnit.SECONDS);
+        try {
+            ProcessBuilder compile = new ProcessBuilder(args);
+            compile.directory(new File("."));
+            compile.inheritIO();
+            compile.redirectError(ProcessBuilder.Redirect.appendTo(errorFile));
+            compile.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
+            Process compileProcess = compile.start();
+            compileProcess.waitFor(5, TimeUnit.SECONDS);
+        }catch (Exception e){
+            System.err.println(e);
+        }
     }
 
 
@@ -125,5 +123,5 @@ public class CompileFiles {
         }
         return 1;
     }
-    
+
 }
