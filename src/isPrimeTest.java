@@ -24,9 +24,7 @@ import java.io.IOException;
      * when using an argument lesser than two
      */
     private boolean test_One(){
-
         isPrime ispr = new isPrime();
-
         return !ispr.isPrime(INTEGER_BELOW_TWO) ? true : false;
     }
 
@@ -37,9 +35,7 @@ import java.io.IOException;
      * @return if the tests fails or not
      */
     private boolean test_Two(){
-
         isPrime ispr = new isPrime();
-
         return ispr.isPrime(INTEGER_PRIME) ? true : false;
     }
 
@@ -49,9 +45,7 @@ import java.io.IOException;
      * @return if the tests fails or not
      */
     private boolean test_Three(){
-
         isPrime ispr = new isPrime();
-
         return !ispr.isPrime(INTEGER_EVEN_NUMBER) ? true : false;
     }
 
@@ -61,9 +55,7 @@ import java.io.IOException;
      * @return if the test fails or not
      */
     private boolean test_Four(){
-
         isPrime ispr = new isPrime();
-
         return !ispr.isPrime(INTEGER_ODD_NOT_PRIME) ? true : false;
     }
 
@@ -81,16 +73,8 @@ import java.io.IOException;
             if (testResults[i]){
             nrOfSuccededTests = nrOfSuccededTests + 1; }
         }
-        try{
-                File resultsFile = new File("results.txt");
-                resultsFile.setWritable(true);
-                FileWriter fw = new FileWriter("results.txt");
-                fw.write("------ TEST RESULTS ------ \n");
-                fw.write((nrOfTests == nrOfSuccededTests ? "SUCCESS\n" : "FAILED\n"));
-                fw.write(nrOfSuccededTests + " OUT OF " + nrOfTests + " TESTS PASSED\n");
-                fw.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+            System.out.println("------ TEST RESULTS ------ \n");
+            System.out.println((nrOfTests == nrOfSuccededTests ? "SUCCESS\n" : "FAILED\n"));
+            System.out.println(nrOfSuccededTests + " OUT OF " + nrOfTests + " TESTS PASSED\n");
         }
     }
