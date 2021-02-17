@@ -40,7 +40,7 @@ public class BuildServlet extends HttpServlet {
 
         ArrayList<Build> builds = new ArrayList<Build>();
         String queryId = request.getParameter("id");
-        DBUtils dbu = new DBUtils();
+        servlet.DBUtils dbu = new servlet.DBUtils();
         
         if(queryId !=null) {
             builds = dbu.fetchWithId(Integer.parseInt(queryId));

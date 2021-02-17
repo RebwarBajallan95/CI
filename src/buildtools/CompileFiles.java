@@ -27,10 +27,9 @@ public class CompileFiles {
      * files within the directory
      * in the provided file path
      * @param pathToFolder path to directory
-     * @param output outputstre
      * @throws IOException
      */
-    public CompileFiles(Path pathToFolder, OutputStream output) throws IOException, InterruptedException {
+    public CompileFiles(Path pathToFolder) throws IOException, InterruptedException {
         File logFile = new File("logFile.txt");
         File errorFile = new File("errorFile.txt");
         pathToTemp = pathToFolder;

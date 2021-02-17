@@ -44,8 +44,8 @@ public class CIServer extends AbstractHandler{
 
         System.out.println(target);
         if("POST".equals(request.getMethod())){
-            OutputStream out = new FileOutputStream(tempFolderPath + "/logs.txt");
             WebhookParser wh = new WebhookParser(request.getReader());
+            System.out.println("Pusher email " + wh.getEmail());
             try {
                 cr = new CloneRepo(wh.getrepoURL(), wh.getBranch(), tempFolderPath);
             } catch (GitAPIException e) {
@@ -54,7 +54,7 @@ public class CIServer extends AbstractHandler{
             File tempdir = cr.getTempDir();
             CompileFiles cf = null;
             try {
-                cf = new CompileFiles(tempdir.toPath(), out);
+                cf = new CompileFiles(tempdir.toPath());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -67,12 +67,12 @@ public class CIServer extends AbstractHandler{
                     System.out.println("Exception call");
                 }
             }
-            out.close();
-            //SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
+            SendMail mail = new SendMail(wh.getName(),wh.getEmail());
+            servlet.DBUtils dbu = new servlet.DBUtils();
+            dbu.insertLog(System.currentTimeMillis()+"",mail.getOutput().contains("SUCCESS") ? "SUCCESS" : "FAILED", mail.getOutput());
+            cr.deleteDir(cr.getTempDir());
             System.out.println("Done!");
         }
-
-
         response.getWriter().println("CI job done");
     }
 
