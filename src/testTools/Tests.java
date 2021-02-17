@@ -1,7 +1,13 @@
 package testTools;
 
-import java.io.*;
-import java.lang.reflect.Method;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class to run the test suit towards the
@@ -16,9 +22,18 @@ public class Tests {
      * @param testDirectory the directory
      * to the compiled files
      */
-    public Tests(String testDirectory) throws Exception {
-        results = new File("results.txt");
+    public Tests(File testDirectory) throws Exception {
+        System.out.println("Initiating tests!");
         runTests(testDirectory);
+    }
+
+    public List<Path> listFiles(Path path) throws IOException {
+        List<Path> result;
+        try (Stream<Path> walk = Files.walk(path)) {
+            result = walk.filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+        }
+        return result;
     }
 
     /**
@@ -27,16 +42,15 @@ public class Tests {
      * @return The results
      * of the tests
      */
-    private void runTests(String testDirectory) throws Exception {
+    private void runTests(File testDirectory) throws Exception {
         /**
          * Change to testDirectory later
          */
-        File directory = new File(System.getProperty("user.dir") + "/src/testTools");
-        File[] directoryList = directory.listFiles();
-        for(File f : directoryList){
-            if (f.canExecute() && f.getName().contains(".class")){
-                System.out.println(f.getName());
-                start(f.getName());
+        for(Path p : listFiles(testDirectory.toPath())){
+            File f = p.toFile();
+            System.out.println(f.getName());
+            if (f.canExecute() && f.getName().contains(".class") && f.getName().contains("Test")){
+                start(f.toPath(),testDirectory.toString());
             }
         }
     }
@@ -54,17 +68,25 @@ public class Tests {
      * @param classname the name of the file to be run
      * @throws Exception thrown if the file cannot be found
      */
-    public static void start(final String classname) throws Exception {  // to keep it simple
-        final String[] args1 = {};
-        String[] splitString = classname.split("[.]");
-        Class clazz = Class.forName("testTools." + splitString[0]);
-        final Method main = clazz.getMethod("main", String[].class);
-        new Thread(() -> {
-            try {
-                main.invoke(null, new Object[]{args1});
-            } catch(Exception e) {
-                throw new AssertionError(e);
-            }
-        }).start();
+    public static void start(Path classname,String directory) throws Exception {
+        System.out.println("Initiating process with class " + classname);
+        ProcessBuilder classPath = new ProcessBuilder("java","-cp", directory);
+        Process cp = classPath.start();
+        cp.waitFor(1,TimeUnit.SECONDS);
+        try{
+            System.out.println(directory+ "/" +classname);
+            ProcessBuilder execute = new ProcessBuilder("java", "isPrimeTest");
+            execute.directory(new File(directory+"/src/"));
+            execute.redirectError(ProcessBuilder.Redirect.appendTo(new File("errorFile1.txt")));
+            execute.redirectOutput(ProcessBuilder.Redirect.appendTo(new File("logFile.txt")));
+            Process executionProcess = execute.start();
+            executionProcess.waitFor(5, TimeUnit.SECONDS);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        //Tests t = new Tests("");
     }
 }
