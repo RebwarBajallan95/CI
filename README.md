@@ -49,7 +49,7 @@ The easiest way to do this is using intellij idea
 The server will be run at `localhost:8888` 
 
 ## Documentation
-[Github pages](https://rebwarbajallan95.github.io/CI/docs/)
+[Github pages](https://rebwarbajallan95.github.io/CI/)
     
 ## List of contributions
 
