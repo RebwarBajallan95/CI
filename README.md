@@ -47,6 +47,9 @@ Build and start the CI server by running the main function in
 The easiest way to do this is using intellij idea
 
 The server will be run at `localhost:8888` 
+
+## Documentation
+[Github pages](https://rebwarbajallan95.github.io/CI/docs/)
     
 ## List of contributions
 
