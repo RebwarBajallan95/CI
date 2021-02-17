@@ -89,3 +89,6 @@ ngrok
 temp/TempDir*
 ##############################
 *.txt
+
+Payara/
+logs.db
