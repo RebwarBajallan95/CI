@@ -41,3 +41,28 @@ Johan Besseling
 * Documentation branch: Refactoring all documentation in to Java standard
 
 * Assessment branch: isPrime.java, isPrimeTest.java
+
+Rebwar Ali Omer Bajallan
+
+* Parse the incomming webhooks: WebhookParser.java
+
+* Clone the repo: CloneRepo.java
+
+* Compile the java files in the repo: CompileFiles.java
+
+
+Simon Binyamin
+
+Branches Documentation, Webserver, main: 
+
+* Initiated BuildServlet.java with its methods
+
+* Created Build.java class that can be instantiated as a build object
+
+* build.xml used to build the project
+
+* Created builds.jsp that works as logserv frontend to display list of builds
+
+* web.xml used to map the servlets
+
+* Documented the BuildServlet.java, Build.java and builds.jsp
