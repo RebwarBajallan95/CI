@@ -1,9 +1,13 @@
-package buildtools;
+package logserv;
 
+import buildtools.CloneRepo;
+import buildtools.CompileFiles;
+import buildtools.WebhookParser;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import testTools.Tests;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,45 +36,48 @@ public class CIServer extends AbstractHandler{
      * @throws IOException
      */
     public void handle(String target,
-                           Request baseRequest,
-                           HttpServletRequest request,
-                           HttpServletResponse response)
-                throws IOException
-        {
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            baseRequest.setHandled(true);
+                       Request baseRequest,
+                       HttpServletRequest request,
+                       HttpServletResponse response)
+            throws IOException
+    {
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
 
-            System.out.println(target);
-            if("POST".equals(request.getMethod())){
-                OutputStream out = new FileOutputStream(tempFolderPath + "/logs.txt");
-                WebhookParser wh = new WebhookParser(request.getReader());
-                try {
-                    cr = new CloneRepo(wh.getrepoURL(), wh.getBranch(), tempFolderPath);
-                } catch (GitAPIException e) {
-                    e.printStackTrace();
-                }
-                File tempdir = cr.getTempDir();
-
-                try {
-                    CompileFiles cf = new CompileFiles(tempdir.toPath(), out);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-
-               // if(cf.compileStatus() == 1){
-               //    // Tests tests = new Tests(tempdir.getPath(), out);
-                //
-                // }
-
-                out.close();
-               // SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
-                System.out.println("Done!");
+        System.out.println(target);
+        if("POST".equals(request.getMethod())){
+            OutputStream out = new FileOutputStream(tempFolderPath + "/logs.txt");
+            WebhookParser wh = new WebhookParser(request.getReader());
+            try {
+                cr = new CloneRepo(wh.getrepoURL(), wh.getBranch(), tempFolderPath);
+            } catch (GitAPIException e) {
+                e.printStackTrace();
             }
-
-
-            response.getWriter().println("CI job done");
+            File tempdir = cr.getTempDir();
+            CompileFiles cf = null;
+            try {
+                cf = new CompileFiles(tempdir.toPath(), out);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            File errorFile = new File("errorFile");
+            if(errorFile.length() == 0){
+                System.out.println("Creating Tests object");
+                try {
+                    Tests tests = new Tests(tempdir);
+                } catch (Exception e) {
+                    System.out.println("Exception call");
+                }
+            }
+            out.close();
+            //SendMail(wh.getName(), wh.getEmail(), out, tests.getResults());
+            System.out.println("Done!");
         }
+
+
+        response.getWriter().println("CI job done");
+    }
 
     /**
      * Used to start the CI server in command line
