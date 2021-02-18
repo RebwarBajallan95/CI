@@ -25,7 +25,7 @@ import java.io.IOException;
      */
     private boolean test_One(){
         isPrime ispr = new isPrime();
-        return !ispr.isPrime(INTEGER_BELOW_TWO) ? true : false;
+        return ispr.isPrime(INTEGER_BELOW_TWO) ? true : false;
     }
 
     /**
